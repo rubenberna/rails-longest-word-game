@@ -1,5 +1,4 @@
 require 'open-uri'
-require 'nokogiri'
 
 class GamesController < ApplicationController
   def new
@@ -14,15 +13,15 @@ class GamesController < ApplicationController
     sample = params[:letter_array].chars
     compare = word&sample
     if compare.length < word.length
-      @result = "Sorry, but #{word.join} cannot be built out of #{sample}"
+      @result = "Sorry, but #{word.join.upcase} cannot be built out of #{sample.join.upcase}"
     else
       url = "https://wagon-dictionary.herokuapp.com/#{word.join}"
       html_file = open(url).read
       html_doc = JSON.parse(html_file)
       if html_doc["found"] == false
-        @result = "Sorry, but #{word.join} doesn't seem to be an Enlish word..."
+        @result = "Sorry, but '#{word.join}' doesn't seem to be an Enlish word..."
       else
-        @result = "Congratulations! #{word.join} is a valid English word!"
+        @result = "Congratulations! '#{word.join}' is a valid English word!\n #{word.length.to_i} points!"
       end
     end
   end
